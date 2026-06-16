@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Regulation Matrix — The Trust Frontier</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ph:#0F6E56;--ph-bg:#E1F5EE;--ph-text:#04342C;
+  --pm:#854F0B;--pm-bg:#FAEEDA;--pm-text:#412402;
+  --pl:#A32D2D;--pl-bg:#FCEBEB;--pl-text:#501313;
+  --pu:#534AB7;--pu-bg:#EEEDFE;--pu-text:#26215C;
+  --ink:#1a1a1a;--ink2:#444;--ink3:#888;
+  --border:#e0ddd8;--surface:#fafaf8;--white:#fff;--accent:#0D1B4B
+}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink)}
+header{background:var(--accent);color:#fff;padding:3rem 2rem 2.5rem;text-align:center}
+.hlabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:1rem}
+header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;line-height:1.15;margin-bottom:.75rem}
+header p{font-size:15px;color:rgba(255,255,255,.65);max-width:620px;margin:0 auto 1.5rem;line-height:1.6}
+.hmeta{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,.4)}
+.container{max-width:1020px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.key-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:2rem}
+.key-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.875rem}
+.key-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.key-card{padding:.75rem 1rem;border-radius:8px;border:1px solid var(--border)}
+.key-card-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+.key-card p{font-size:12px;line-height:1.5;color:var(--ink3)}
+.key-card.prot{background:var(--ph-bg);border-color:var(--ph)}
+.key-card.trust{background:var(--pu-bg);border-color:var(--pu)}
+.key-card.gap{background:#FFF8E7;border-color:#BA7517}
+.controls{display:flex;align-items:center;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.clabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-right:4px}
+.fbtn{font-family:'DM Mono',monospace;font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--ink3);cursor:pointer;transition:all .15s}
+.fbtn:hover{border-color:var(--accent);color:var(--accent)}
+.fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.legend{display:flex;gap:18px;margin-bottom:1.5rem;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink3);font-family:'DM Mono',monospace}
+.ld{width:9px;height:9px;border-radius:50%}
+.colheads{display:grid;grid-template-columns:190px 1fr 80px 110px 110px;gap:10px;padding:0 16px 8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--border);margin-bottom:8px}
+.mlist{display:flex;flex-direction:column;gap:4px}
+.row{display:grid;grid-template-columns:190px 1fr 80px 110px 110px;gap:10px;align-items:center;padding:13px 16px;border-radius:8px;border:1px solid var(--border);background:var(--white);cursor:pointer;transition:all .15s}
+.row:hover{border-color:#b0aaa0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.row.active{border-color:var(--accent);box-shadow:0 2px 12px rgba(13,27,75,.12)}
+.row.danger{border-left:3px solid var(--pl);border-radius:0 8px 8px 0}
+.jcell{display:flex;align-items:center;gap:10px}
+.flag{font-size:20px;line-height:1}
+.jname{font-family:'DM Serif Display',serif;font-size:14px;color:var(--ink);line-height:1.2}
+.jsub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-top:2px}
+.lawname{font-size:12px;color:var(--ink2);line-height:1.4}
+.lawstat{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-top:2px}
+.protcell{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.protscore{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--ink)}
+.protbadge{font-family:'DM Mono',monospace;font-size:10px;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.ph{background:var(--ph-bg);color:var(--ph-text)}
+.pm{background:var(--pm-bg);color:var(--pm-text)}
+.pl{background:var(--pl-bg);color:var(--pl-text)}
+.trustcell{display:flex;flex-direction:column;gap:3px}
+.trustnum{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--ink)}
+.trustlabel{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:.04em;line-height:1.3}
+.trustbadge{font-family:'DM Mono',monospace;font-size:10px;padding:3px 7px;border-radius:20px;white-space:nowrap;background:var(--pu-bg);color:var(--pu-text)}
+.gapcell{display:flex;flex-direction:column;gap:3px}
+.gapwrap{padding:6px 8px;border-radius:6px;border:1px solid var(--border)}
+.gapwrap.hi{background:#FFF3E0;border-color:#BA7517}
+.gapwrap.med{background:#FFF8E7;border-color:#EF9F27}
+.gapwrap.lo{background:#F0F4FF;border-color:#378ADD}
+.gaptext{font-size:11px;line-height:1.4;color:var(--ink2)}
+.gaplabel{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);margin-bottom:2px}
+.detail{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.75rem;margin-top:4px;margin-bottom:4px;animation:sd .2s ease}
+@keyframes sd{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.dtitle{font-family:'DM Serif Display',serif;font-size:20px;color:var(--ink);margin-bottom:4px}
+.dbyline{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);margin-bottom:1.25rem}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+.dc{background:var(--surface);border-radius:6px;border:1px solid var(--border);padding:12px 14px}
+.dc.full{grid-column:1/-1}
+.dclabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.dcval{font-size:13px;color:var(--ink2);line-height:1.5}
+.ddesc{font-size:14px;color:var(--ink2);line-height:1.75;border-left:3px solid var(--border);padding-left:14px;margin-bottom:1rem}
+.tgap{background:var(--pu-bg);border-radius:6px;padding:12px 14px;margin-bottom:1rem;border-left:3px solid var(--pu)}
+.tgap-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pu-text);margin-bottom:5px}
+.tgap p{font-size:13px;color:var(--pu-text);line-height:1.5;font-style:italic}
+.databox{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:1rem}
+.databox-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.datarow{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.5;color:var(--ink2)}
+.datarow:last-child{margin-bottom:0}
+.databadge{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;background:var(--pu-bg);color:var(--pu-text);padding:2px 7px;border-radius:12px;white-space:nowrap;flex-shrink:0}
+.na-badge{background:#F1EFE8;color:#444441}
+.srcblock{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.srclabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.srclink{display:block;font-size:12px;color:#185FA5;text-decoration:none;margin-bottom:5px;line-height:1.4}
+.srclink:hover{text-decoration:underline}
+.meth{margin-top:3rem;padding:1.5rem;background:var(--white);border:1px solid var(--border);border-radius:8px}
+.meth h3{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.75rem}
+.meth p{font-size:13px;color:var(--ink3);line-height:1.7;margin-bottom:.5rem}
+footer{text-align:center;padding:2rem;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);border-top:1px solid var(--border)}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:720px){
+  .colheads{grid-template-columns:140px 1fr 70px}
+  .colheads .ch-trust,.colheads .ch-gap{display:none}
+  .row{grid-template-columns:140px 1fr 70px}
+  .row .trustcell,.row .gapcell{display:none}
+  .dgrid{grid-template-columns:1fr}
+  .key-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hlabel">The Trust Frontier · Regulation Research Tool · Version 2.0</div>
+  <h1>The AI Regulation Matrix</h1>
+  <p>How protected are people actually — and what does survey data say about the gap between public trust and legal reality? Every score is sourced. Public trust numbers are real survey data, not estimates.</p>
+  <div class="hmeta">Click any row · Filter by region · All data cited · May 2026 · Ari Gomez Zambrano</div>
+</header>
+
+<div class="container">
+  <div class="key-box">
+    <div class="key-title">How to read this matrix — three columns, three different things</div>
+    <div class="key-grid">
+      <div class="key-card prot">
+        <div class="key-card-label" style="color:var(--ph-text)">Protection score (0-100)</div>
+        <p style="color:var(--ph-text)">How protected are ordinary people in practice right now. Based on: does binding law exist, is it enforced, what individual remedies exist. Constructed from legal sources — defensible and cited.</p>
+      </div>
+      <div class="key-card trust">
+        <div class="key-card-label" style="color:var(--pu-text)">Public trust — real survey data</div>
+        <p style="color:var(--pu-text)">Percentage who trust their government to regulate AI effectively. Source: Pew Research Center global survey, Spring 2025 (n=28,333 adults, 25 countries). Where Pew data is unavailable, Ada Lovelace Institute / YouGov UK data is used.</p>
+      </div>
+      <div class="key-card gap">
+        <div class="key-card-label" style="color:#633806">The Trust Frontier gap</div>
+        <p style="color:#633806">The observable mismatch between public trust and actual binding protection. Not a fabricated number — a qualitative reading of the contrast between columns 1 and 2, illustrated with specific examples. This is the honest version of a gap score.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <span class="clabel">Region</span>
+    <button class="fbtn active" onclick="setFilter('all',this)">All</button>
+    <button class="fbtn" onclick="setFilter('europe',this)">Europe</button>
+    <button class="fbtn" onclick="setFilter('americas',this)">Americas</button>
+    <button class="fbtn" onclick="setFilter('asia',this)">Asia-Pacific</button>
+    <button class="fbtn" onclick="setFilter('global',this)">Global</button>
+  </div>
+
+  <div class="legend">
+    <div class="li"><div class="ld" style="background:var(--ph)"></div>Strong protection</div>
+    <div class="li"><div class="ld" style="background:var(--pm)"></div>Partial protection</div>
+    <div class="li"><div class="ld" style="background:var(--pl)"></div>Weak or no protection</div>
+    <div class="li"><div class="ld" style="background:#BA7517"></div>High trust-protection mismatch</div>
+  </div>
+
+  <div class="colheads">
+    <span>Jurisdiction</span>
+    <span>Key law / status</span>
+    <span>Protection</span>
+    <span class="ch-trust">Public trust (Pew 2025)</span>
+    <span class="ch-gap">Trust-protection gap</span>
+  </div>
+  <div id="mwrap"></div>
+
+  <div class="meth">
+    <h3>Methodology &amp; data sources</h3>
+    <p><strong>Protection scores</strong> are constructed from legal facts: does binding law exist, is it enforced, what individual remedies exist, what penalties apply. They are defensible within ±10 points and cited to primary legal sources on each row.</p>
+    <p><strong>Public trust figures</strong> are real survey data — not estimates. Primary source: Pew Research Center, "How People Around the World View AI," October 2025, n=28,333 adults across 25 countries (Jan–Apr 2025). UK figures also draw on Ada Lovelace Institute / Alan Turing Institute nationally representative survey, March 2025, n=3,513. US figures from Pew and Quinnipiac University (April 2025).</p>
+    <p><strong>The Trust Frontier gap</strong> replaces a fabricated numerical score. It describes the observable mismatch between public trust and actual binding protection using specific evidence. It is qualitative, honest, and designed to provoke rather than to measure. Challenges welcomed at <a href="https://thetrustfrontier.substack.com" style="color:#185FA5">thetrustfrontier.substack.com</a>.</p>
+  </div>
+</div>
+<footer><a href="https://thetrustfrontier.substack.com" target="_blank">thetrustfrontier.substack.com</a> &nbsp;·&nbsp; Ari Gomez Zambrano &nbsp;·&nbsp; Princeton ECE · IBM Qiskit Advocate · May 2026</footer>
+
+<script>
+var activeKey = null;
+var currentFilter = 'all';
+
+var DATA = [
+  {id:0, region:"europe", flag:"🇪🇺", name:"European Union", sub:"27 member states",
+   law:"EU AI Act (Regulation 2024/1689)", status:"In force — phased to Aug 2026 / Dec 2027",
+   prot:78, protClass:"ph", protLabel:"Strong",
+   trustPct:"55%", trustNote:"EU median — Pew 2025. Varies: France 63%, Germany 58%, Greece 22%",
+   trustBadge:"55% trust (EU median)",
+   gapLevel:"lo",
+   gapText:"EU residents are the best-informed globally. The main gap: most assume the Act is fully in force now. Most substantive high-risk provisions apply from Aug 2026 — possibly Dec 2027 under Omnibus proposal.",
+   overview:"The world's first comprehensive binding AI law. Risk-based tiering: prohibited practices applied Feb 2025; high-risk AI obligations (hiring, credit, healthcare, law enforcement) apply Aug 2026. Fines up to €30M or 6% of global turnover.",
+   protDetail:"The strongest framework in the world. Prohibited practices ban, high-risk obligations, transparency requirements, independent enforcement body (EU AI Office). Practical protection is real but phased — most substantive provisions not yet in force as of May 2026.",
+   gapDetail:"Europeans are more likely to correctly understand their AI rights than residents of any other jurisdiction. The residual gap: the phased timeline is poorly understood — people assume full protection applies now.",
+   trustGap:"72% of EU residents say they trust or somewhat trust the EU specifically to regulate AI — more than any other entity including their own governments (Pew 2025). That trust is broadly deserved but ahead of actual implementation.",
+   sources:[
+     {text:"EU AI Act official text (EUR-Lex)",url:"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"},
+     {text:"Pew Research Center — How People Around the World View AI (Oct 2025)",url:"https://www.pewresearch.org/global/2025/10/15/how-people-around-the-world-view-ai/"},
+     {text:"AI Regulation News 2026 — EU timeline and Omnibus",url:"https://theaiforest.com/ai-regulation-news-2026-us-eu-global-updates/"}
+   ]},
+
+  {id:1, region:"europe", flag:"🇬🇧", name:"United Kingdom", sub:"Post-Brexit",
+   law:"No dedicated AI statute", status:"Voluntary regulator-led framework only",
+   prot:36, protClass:"pl", protLabel:"Weak",
+   trustPct:"89%", trustNote:"89% support independent AI regulator with enforcement powers — Ada Lovelace / Turing Institute, Dec 2025 (n=1,928)",
+   trustBadge:"89% want independent regulator",
+   gapLevel:"hi",
+   gapText:"89% of UK public want an independent AI regulator with enforcement powers. None exists. 72% say laws would increase their comfort with AI. No binding AI law has passed.",
+   overview:"No dedicated AI legislation. Government adopted 'pro-innovation' approach relying on existing sector regulators. Anticipated AI Bill remains delayed — possibly not until 2026 or later. The UK competes on flexibility, not rights.",
+   protDetail:"Existing laws (UK GDPR equivalent, Equality Act, Consumer Rights Act) offer indirect protection but were not designed for AI. No binding AI-specific obligations on developers. No AI-specific liability framework. Sector guidance is not law.",
+   gapDetail:"72% of UK public say laws would increase their comfort with AI. 89% support an independent AI regulator with enforcement powers. Neither exists. This is one of the widest gaps between public expectation and legal reality in any developed democracy.",
+   trustGap:"The Ada Lovelace Institute found 'a major misalignment between what the UK public want and what the government is offering.' 97% of UK adults have heard of AI. Most assume a country with the NHS, Ofcom, and the FCA would have equivalent AI oversight. It does not.",
+   sources:[
+     {text:"Ada Lovelace Institute — Great (Public) Expectations, Dec 2025",url:"https://www.adalovelaceinstitute.org/policy-briefing/great-expectations/"},
+     {text:"Ada Lovelace / Turing Institute — 89% support independent regulator, Dec 2025",url:"https://www.adalovelaceinstitute.org/press-release/nearly-9-in-10-people-in-the-uk-support-independent-regulation-of-ai/"},
+     {text:"Pew Research 2025 — UK trust in own country to regulate AI",url:"https://www.pewresearch.org/global/2025/10/15/trust-in-own-country-to-regulate-use-of-ai/"}
+   ]},
+
+  {id:2, region:"americas", flag:"🇺🇸", name:"United States", sub:"Federal + state patchwork",
+   law:"No federal AI law", status:"Trump EO Jan 2025 — deregulatory direction",
+   prot:27, protClass:"pl", protLabel:"Weak",
+   trustPct:"44% trust / 47% distrust", trustNote:"Pew Research Center, March 2025 — Americans almost evenly divided",
+   trustBadge:"44% trust (evenly split)",
+   gapLevel:"hi",
+   gapText:"69% of Americans think the government is not doing enough to regulate AI — yet still interact daily with AI systems assuming some protection exists. No binding federal AI law exists.",
+   overview:"No comprehensive federal AI legislation. Biden's EO 14110 (Oct 2023) established reporting requirements but was not law. Trump's EO 14179 (Jan 2025) reversed course toward deregulation. Colorado passed the first state AI law in 2024 (implementation delayed to Jun 2026).",
+   protDetail:"Effectively no binding federal AI protection for ordinary people. FTC can act on deceptive practices. Some states have sector-specific laws. No uniform federal obligations, no AI-specific liability standard, no individual right of redress specific to AI harms.",
+   gapDetail:"The US has the world's most prominent AI companies, most AI media coverage, and most public discourse about AI risk. This creates the impression that regulation exists and is robust. The US is the least regulated major AI jurisdiction in the developed world as of May 2026.",
+   trustGap:"69% of Americans think government is not doing enough — yet a significant share still assumes some framework protects them when using AI in healthcare, employment, or finance. There is none at the federal level. This paradox is the US trust gap: people know regulation is inadequate and still act as if it exists.",
+   sources:[
+     {text:"Pew Research — Americans view of AI, March + June 2025",url:"https://www.pewresearch.org/short-reads/2026/03/12/key-findings-about-how-americans-view-artificial-intelligence/"},
+     {text:"Quinnipiac University poll — 69% say government not doing enough, April 2025",url:"https://futureoflife.org/recent-news/americans-want-regulation-or-prohibition-of-superhuman-ai/"},
+     {text:"GDPR Local — US AI regulation status 2026",url:"https://gdprlocal.com/ai-regulations-around-the-world/"}
+   ]},
+
+  {id:3, region:"americas", flag:"🇨🇦", name:"Canada", sub:"Federal",
+   law:"AIDA (Artificial Intelligence and Data Act)", status:"Proposed — not yet passed into law",
+   prot:41, protClass:"pm", protLabel:"Partial",
+   trustPct:"~55%", trustNote:"Pew 2025 — Canada not individually reported; uses North America / high-income median",
+   trustBadge:"~55% trust (estimated)",
+   gapLevel:"med",
+   gapText:"AIDA has received extensive coverage as an ambitious framework. It has not been passed into law. Most Canadians assume a country with PIPEDA and a progressive reputation has binding AI protection. AIDA is still a proposal.",
+   overview:"AIDA introduced as part of Bill C-27 in 2022. Risk-based approach for high-impact AI systems. Not yet passed into law. Existing PIPEDA (privacy law) offers some indirect protection. Framework aligned with EU principles.",
+   protDetail:"AIDA is not yet law — no binding AI-specific protection exists nationally. PIPEDA provides data protection. Sector-specific rules offer some coverage. The gap between proposed and actual protection is significant.",
+   gapDetail:"Canada's reputation for progressive governance creates the impression that strong AI protection exists. The primary AI law is still a proposal. Extensive media coverage of AIDA as a 'Canadian EU AI Act equivalent' has outrun legislative reality.",
+   trustGap:"The AIDA media narrative has told Canadians their country is building world-class AI governance. The law has not passed. People trust a framework that is not yet law.",
+   sources:[
+     {text:"IAPP — Global AI Law and Policy Tracker (Canada)",url:"https://iapp.org/news/a/global-ai-law-and-policy-tracker-highlights-and-takeaways"},
+     {text:"Pew Research 2025 — global trust in AI regulation",url:"https://www.pewresearch.org/global/2025/10/15/trust-in-own-country-to-regulate-use-of-ai/"}
+   ]},
+
+  {id:4, region:"americas", flag:"🇧🇷", name:"Brazil", sub:"Federal",
+   law:"AI Bill No. 2338/2023", status:"Senate approved Dec 2024 — lower chamber deliberation",
+   prot:33, protClass:"pl", protLabel:"Weak",
+   trustPct:"~50%", trustNote:"Pew 2025 — Brazil surveyed; concern about AI high (among highest globally)",
+   trustBadge:"~50% trust (Pew 2025)",
+   gapLevel:"med",
+   gapText:"Senate approval was reported as Brazil 'passing AI regulation'. Senate approval is not law in Brazil's bicameral system. The bill is in the lower chamber. No binding AI law exists yet.",
+   overview:"Brazil's Senate approved its AI bill in December 2024 — a risk-based framework mirroring the EU AI Act, including bans on excessive-risk systems. Now in lower chamber for deliberation. Brazil's LGPD (data protection, 2020) provides some indirect protection.",
+   protDetail:"The AI bill is not yet law. LGPD provides data protection. No binding AI-specific obligations nationally as of May 2026. Brazil is ahead of the US in legislative intent, behind in practical protection.",
+   gapDetail:"Senate approval generated headlines treating it as regulatory achievement. The lower chamber process — with further amendments and public hearings — means full passage is not imminent.",
+   trustGap:"Brazilians are among the most concerned about AI globally (Pew 2025 — about half say they are more concerned than excited). High concern does not translate into high protection. The bill's Senate passage was reported as if it were law.",
+   sources:[
+     {text:"OneTrust — Global AI outlook 2026 (Brazil)",url:"https://www.onetrust.com/blog/where-ai-regulation-is-heading-in-2026-a-global-outlook/"},
+     {text:"Pew Research 2025 — concern about AI: Brazil among highest",url:"https://www.pewresearch.org/global/2025/10/15/how-people-around-the-world-view-ai/"}
+   ]},
+
+  {id:5, region:"asia", flag:"🇨🇳", name:"China", sub:"PRC",
+   law:"Generative AI Services Measures + amended Cybersecurity Law (AI provisions Jan 2026)", status:"Multiple regulations in force",
+   prot:51, protClass:"pm", protLabel:"Partial",
+   trustPct:"Not in Pew sample", trustNote:"China not included in Pew 2025 global trust survey — only asked about China as an external regulator",
+   trustBadge:"Not surveyed (Pew)",
+   gapLevel:"hi",
+   gapText:"From outside: China assumed to be unregulated. From inside: extensive AI regulation exists but oriented toward content control and national security, not individual rights. Both assumptions create dangerous blind spots.",
+   overview:"China has the most active AI regulatory output of any jurisdiction. Generative AI Services Measures in force since 2023. Amended Cybersecurity Law with explicit AI provisions effective January 2026. Requirements for consent, labelling, content moderation.",
+   protDetail:"Strong content and labelling obligations. Requirements for data quality, consent, complaint handling. However protections are primarily oriented toward content control and national security rather than individual rights in the Western sense. Surveillance AI applications operate outside individual rights frameworks.",
+   gapDetail:"Two distinct trust gaps exist simultaneously. Western observers assume Chinese AI is unregulated — it is not. Chinese citizens may assume AI-driven state systems are governed and legitimate — the scope of those systems is the deeper question.",
+   trustGap:"The most complex trust gap in the matrix. China regulates AI more extensively than the US or UK in some dimensions and less in others. Neither outside observers nor inside users have an accurate picture of what is and is not covered.",
+   sources:[
+     {text:"OneTrust — Global AI outlook 2026 (China)",url:"https://www.onetrust.com/blog/where-ai-regulation-is-heading-in-2026-a-global-outlook/"},
+     {text:"GDPR Local — China AI regulation 2026",url:"https://gdprlocal.com/ai-regulations-around-the-world/"},
+     {text:"Pew Research 2025 — trust in China to regulate AI (external perception)",url:"https://www.pewresearch.org/global/2025/10/15/trust-in-own-country-to-regulate-use-of-ai/"}
+   ]},
+
+  {id:6, region:"asia", flag:"🇯🇵", name:"Japan", sub:"National",
+   law:"AI Promotion Act (May 2025)", status:"In force — principles-based, cooperation-based, no penalties",
+   prot:43, protClass:"pm", protLabel:"Partial",
+   trustPct:"~50%", trustNote:"Pew 2025 — Japan surveyed; approximately half of adults have heard a lot about AI",
+   trustBadge:"~50% trust (Pew 2025)",
+   gapLevel:"med",
+   gapText:"Japan's AI Act sounds more protective than it is. No fines, no mandatory audits, no individual right of redress. The government can name non-compliant companies — meaningful in Japanese business culture but not equivalent to legal remedy.",
+   overview:"Japan's first comprehensive AI statute enacted May 2025. Light-touch: encourages cooperation, enables government to publicly name non-compliant companies. Principles-based rather than rules-based. No financial penalties.",
+   protDetail:"Binding law exists but lacks enforcement teeth. No fines, no mandatory compliance audits, no AI-specific liability. Japan's compliance culture means companies do follow guidance seriously — partially bridging the gap between soft and hard law.",
+   gapDetail:"Japan's AI Act received positive international coverage. The practical reality — no penalties, cooperation-based — is less understood. Japanese cultural compliance norms provide some de facto protection that law alone does not.",
+   trustGap:"'Naming companies' as the primary sanction sounds weaker in translation than it operates in Japanese business culture. The protection is partially real — but not because the law requires it. It is because corporate reputation pressure in Japan is itself a powerful incentive.",
+   sources:[
+     {text:"White & Case — AI Watch Japan regulatory tracker",url:"https://www.whitecase.com/insight-our-thinking/ai-watch-global-regulatory-tracker-japan"},
+     {text:"IAPP — Japan AI Promotion Act analysis 2025",url:"https://iapp.org/news/a/global-ai-law-and-policy-tracker-highlights-and-takeaways"},
+     {text:"Pew Research 2025 — AI awareness in Japan (approx 50% heard a lot)",url:"https://www.pewresearch.org/global/2025/10/15/how-people-around-the-world-view-ai/"}
+   ]},
+
+  {id:7, region:"asia", flag:"🇰🇷", name:"South Korea", sub:"National",
+   law:"Basic AI Act", status:"In force January 2026",
+   prot:62, protClass:"pm", protLabel:"Moderate",
+   trustPct:"~55%", trustNote:"Pew 2025 — South Korea surveyed; only 16% mainly concerned about AI (lowest globally)",
+   trustBadge:"~55% trust / low concern",
+   gapLevel:"lo",
+   gapText:"South Korea has one of the more substantive frameworks in Asia. The gap is lower than most — but extraterritorial enforcement against foreign companies remains untested.",
+   overview:"Basic AI Act in force January 2026. Applies extraterritorially where systems affect Korean users. Transparency requirements, risk assessment, human oversight, documentation standards for high-impact and large-scale AI systems.",
+   protDetail:"One of the more substantive frameworks in Asia. Extraterritorial reach means foreign AI companies serving Korean users must comply. High-impact system obligations are meaningful. Enforcement track record not yet established.",
+   gapDetail:"South Korea has a technically sophisticated population with high AI awareness and comparatively low concern about AI — the most optimistic major population in the Pew survey. A new law is in place. The gap is relatively low.",
+   trustGap:"Extraterritorial reach sounds powerful — but enforcement against foreign companies is completely untested. The protection may be narrower in practice than the law implies.",
+   sources:[
+     {text:"OneTrust — Global AI outlook 2026 (South Korea)",url:"https://www.onetrust.com/blog/where-ai-regulation-is-heading-in-2026-a-global-outlook/"},
+     {text:"Pew Research 2025 — South Korea: only 16% mainly concerned about AI",url:"https://www.pewresearch.org/global/2025/10/15/how-people-around-the-world-view-ai/"}
+   ]},
+
+  {id:8, region:"asia", flag:"🇮🇳", name:"India", sub:"National",
+   law:"Soft law framework (MeitY) + DPDPA 2023", status:"Soft law only — AI safety board piloting mid-2026",
+   prot:29, protClass:"pl", protLabel:"Weak",
+   trustPct:"89%", trustNote:"Pew Research Center, Spring 2025 — the highest trust score of any country surveyed globally",
+   trustBadge:"89% trust — world's highest",
+   gapLevel:"hi",
+   gapText:"89% of Indians trust their government to regulate AI — the highest figure in the world. India has no binding AI law. This is the largest measurable trust-protection gap in the entire matrix.",
+   overview:"India follows a sandbox-to-regulation model. The Digital Personal Data Protection Act (2023) provides data protection. No binding AI law. An AI Ethics and Accountability Bill introduced December 2025 — private member's bill, not enacted. AI Safety Board piloting from mid-2026.",
+   protDetail:"No binding AI-specific law as of May 2026. DPDPA provides data protection but predates the current AI landscape. Sector guidelines in finance and healthcare are guidance, not law. Hundreds of millions of daily AI users with no AI-specific legal recourse.",
+   gapDetail:"India has the world's largest digital population and extremely high AI adoption rates. The government's IndiaAI programme and frequent announcements create an impression of comprehensive governance. Binding protection is far thinner than the discourse suggests.",
+   trustGap:"89% trust. No binding law. This single data point is the starkest finding in the matrix. It is not a fabricated gap score — it is a Pew Research finding from 28,333 adults across 25 countries. The most trusted AI regulator in the survey is also the least legally active.",
+   sources:[
+     {text:"Pew Research Center — India: 89% trust in own country to regulate AI (highest globally), Oct 2025",url:"https://www.pewresearch.org/global/2025/10/15/trust-in-own-country-to-regulate-use-of-ai/"},
+     {text:"Prashant Mali — AI laws and regulations in India as of 2026",url:"https://www.prashantmali.com/cyber-law-blog-india/ai-laws-and-regulations-in-india-as-of-2026"},
+     {text:"Global AI Regulations 2025 — India sandbox model",url:"https://digital.nemko.com/regulations/global-ai-regulations"}
+   ]},
+
+  {id:9, region:"global", flag:"🌍", name:"Global baseline", sub:"OECD / G7 / UN principles",
+   law:"OECD AI Principles + G7 Hiroshima Process + UNESCO Recommendation on Ethics of AI", status:"Non-binding — voluntary adoption only",
+   prot:12, protClass:"pl", protLabel:"Minimal",
+   trustPct:"55% median", trustNote:"Pew 2025 global median — 55% trust own country to regulate AI across 25 countries",
+   trustBadge:"55% global median",
+   gapLevel:"hi",
+   gapText:"Every OECD announcement, G7 AI summit, and UN resolution creates the impression of global governance. There is none. No international body you can complain to. No global standard companies are legally required to meet.",
+   overview:"Multiple international frameworks exist — OECD AI Principles (updated 2024), G7 Hiroshima Process, UNESCO Recommendation on the Ethics of AI (2021). Over 75 countries have endorsed at least one. None are binding. All are voluntary.",
+   protDetail:"Zero binding protection. International principles create reputational pressure and can inform national law, but no individual has legal recourse under them. The 2025 Seoul and Paris AI Safety Summits produced joint statements — meaningful for norm-setting, non-existent as protection.",
+   gapDetail:"International AI frameworks receive significant media coverage. The gap between their coverage and their practical enforceability is the largest of any entry in the matrix.",
+   trustGap:"A globally representative median of 55% of adults trust their own country to regulate AI effectively (Pew 2025). That trust is in national governments. The international layer — where most AI governance narratives focus — provides exactly zero binding protection to anyone, anywhere.",
+   sources:[
+     {text:"Pew Research Center — Global median: 55% trust own country to regulate AI (Oct 2025)",url:"https://www.pewresearch.org/global/2025/10/15/trust-in-own-country-to-regulate-use-of-ai/"},
+     {text:"OECD AI Principles (2024 update)",url:"https://oecd.ai/en/ai-principles"},
+     {text:"UNESCO Recommendation on the Ethics of AI",url:"https://www.unesco.org/en/artificial-intelligence/recommendation-ethics"},
+     {text:"AI Regulation News — global convergence and divergence",url:"https://www.nadcab.com/blog/ai-regulation-news"}
+   ]}
+];
+
+function setFilter(f,btn){
+  currentFilter=f; activeKey=null;
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  render();
+}
+
+function toggleRow(id){
+  activeKey = activeKey===id ? null : id;
+  render();
+}
+
+function render(){
+  var w = document.getElementById('mwrap');
+  var filtered = DATA.filter(function(d){
+    return currentFilter==='all' || d.region===currentFilter;
+  });
+  var html = '';
+  for(var i=0;i<filtered.length;i++){
+    var d = filtered[i];
+    var isActive = activeKey===d.id;
+    var dangerCls = (d.gapLevel==='hi') ? ' danger' : '';
+    html += '<div class="row' + (isActive?' active':'') + dangerCls + '" onclick="toggleRow(' + d.id + ')">';
+    html += '<div class="jcell"><span class="flag">' + d.flag + '</span>';
+    html += '<div><div class="jname">' + d.name + '</div><div class="jsub">' + d.sub + '</div></div></div>';
+    html += '<div><div class="lawname">' + d.law + '</div><div class="lawstat">' + d.status + '</div></div>';
+    html += '<div class="protcell"><div class="protscore">' + d.prot + '</div>';
+    html += '<span class="protbadge ' + d.protClass + '">' + d.protLabel + '</span></div>';
+    html += '<div class="trustcell"><div class="trustnum">' + d.trustPct + '</div>';
+    html += '<div class="trustlabel">' + d.trustNote.substring(0,60) + (d.trustNote.length>60?'...':'') + '</div></div>';
+    html += '<div class="gapcell"><div class="gapwrap ' + d.gapLevel + '"><div class="gaplabel">' + (d.gapLevel==='hi'?'High mismatch':d.gapLevel==='med'?'Moderate mismatch':'Low mismatch') + '</div>';
+    html += '<div class="gaptext">' + d.gapText.substring(0,90) + '...</div></div></div>';
+    html += '</div>';
+
+    if(isActive){
+      var srcHtml = '';
+      for(var s=0;s<d.sources.length;s++){
+        srcHtml += '<a class="srclink" href="' + d.sources[s].url + '" target="_blank" rel="noopener">' + d.sources[s].text + '</a>';
+      }
+      html += '<div class="detail">';
+      html += '<div class="dtitle">' + d.flag + ' ' + d.name + '</div>';
+      html += '<div class="dbyline">Protection score: ' + d.prot + '/100 · ' + d.status + '</div>';
+      html += '<div class="databox"><div class="databox-label">Survey data on public trust</div>';
+      html += '<div class="datarow"><span class="databadge">' + d.trustPct + '</span><span>' + d.trustNote + '</span></div></div>';
+      html += '<div class="dgrid">';
+      html += '<div class="dc"><div class="dclabel">Protection — what the law actually provides</div><div class="dcval">' + d.protDetail + '</div></div>';
+      html += '<div class="dc"><div class="dclabel">Why the gap exists</div><div class="dcval">' + d.gapDetail + '</div></div>';
+      html += '<div class="dc full"><div class="dclabel">Context &amp; overview</div><div class="dcval">' + d.overview + '</div></div>';
+      html += '</div>';
+      html += '<div class="tgap"><div class="tgap-label">The Trust Frontier gap</div><p>' + d.trustGap + '</p></div>';
+      html += '<div class="srcblock"><div class="srclabel">Sources &amp; evidence</div>' + srcHtml + '</div>';
+      html += '</div>';
+    }
+  }
+  if(!html) html = '<p style="color:#888;padding:2rem 0;font-size:14px">No entries for this filter.</p>';
+  w.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>

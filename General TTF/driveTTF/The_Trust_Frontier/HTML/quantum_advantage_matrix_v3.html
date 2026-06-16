@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Advantage Matrix — The Trust Frontier</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --near:#0F6E56;--near-bg:#E1F5EE;--near-text:#04342C;
+  --mid:#854F0B;--mid-bg:#FAEEDA;--mid-text:#412402;
+  --far:#A32D2D;--far-bg:#FCEBEB;--far-text:#501313;
+  --dep:#185FA5;--dep-bg:#E6F1FB;--dep-text:#042C53;
+  --ink:#1a1a1a;--ink2:#444;--ink3:#888;
+  --border:#e0ddd8;--surface:#fafaf8;--white:#fff;--accent:#0D1B4B
+}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink)}
+header{background:var(--accent);color:#fff;padding:3rem 2rem 2.5rem;text-align:center}
+.hlabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:1rem}
+header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;line-height:1.15;margin-bottom:.75rem}
+header p{font-size:15px;color:rgba(255,255,255,.65);max-width:580px;margin:0 auto 1.5rem;line-height:1.6}
+.hmeta{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,.4)}
+.container{max-width:980px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.controls{display:flex;align-items:center;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.clabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-right:4px}
+.filterbtn{font-family:'DM Mono',monospace;font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--ink3);cursor:pointer;transition:all .15s}
+.filterbtn:hover{border-color:var(--accent);color:var(--accent)}
+.filterbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.legend{display:flex;gap:18px;margin-bottom:1.5rem;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink3);font-family:'DM Mono',monospace}
+.ld{width:9px;height:9px;border-radius:50%}
+.colheads{display:grid;grid-template-columns:1fr 160px 90px 58px;gap:12px;padding:0 16px 8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--border);margin-bottom:8px}
+.sdiv{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:1.5rem 0 .75rem;display:flex;align-items:center;gap:12px}
+.sdiv::after{content:'';flex:1;height:1px;background:var(--border)}
+.mlist{display:flex;flex-direction:column;gap:4px}
+.row{display:grid;grid-template-columns:1fr 160px 90px 58px;gap:12px;align-items:center;padding:13px 16px;border-radius:8px;border:1px solid var(--border);background:var(--white);cursor:pointer;transition:all .15s}
+.row:hover{border-color:#b0aaa0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.row.active{border-color:var(--accent);box-shadow:0 2px 12px rgba(13,27,75,.12)}
+.row.sensing{border-left:3px solid #378ADD;border-radius:0 8px 8px 0}
+.rname{font-family:'DM Serif Display',serif;font-size:15px;color:var(--ink);line-height:1.3}
+.rdomain{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-top:3px}
+.bwrap{display:flex;align-items:center;gap:8px}
+.btrack{flex:1;height:5px;background:#eeebe5;border-radius:3px;overflow:hidden}
+.bfill{height:100%;border-radius:3px}
+.tbadge{font-family:'DM Mono',monospace;font-size:10px;padding:4px 9px;border-radius:20px;white-space:nowrap;text-align:center}
+.badge-near{background:var(--near-bg);color:var(--near-text)}
+.badge-mid{background:var(--mid-bg);color:var(--mid-text)}
+.badge-far{background:var(--far-bg);color:var(--far-text)}
+.badge-dep{background:var(--dep-bg);color:var(--dep-text)}
+.scoreval{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--ink);text-align:right}
+.detail{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.75rem;margin-top:4px;margin-bottom:4px;animation:sd .2s ease}
+@keyframes sd{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.dtitle{font-family:'DM Serif Display',serif;font-size:20px;color:var(--ink);margin-bottom:4px}
+.dbyline{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);margin-bottom:1.25rem}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+.dc{background:var(--surface);border-radius:6px;border:1px solid var(--border);padding:12px 14px}
+.dc.full{grid-column:1/-1}
+.dclabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.dcval{font-size:13px;color:var(--ink2);line-height:1.5}
+.ddesc{font-size:14px;color:var(--ink2);line-height:1.75;border-left:3px solid var(--border);padding-left:14px;margin-bottom:1rem}
+.srcblock{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.srclabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.srclink{display:block;font-size:12px;color:var(--dep);text-decoration:none;margin-bottom:5px;line-height:1.4}
+.srclink:hover{text-decoration:underline}
+.srcnote{font-size:12px;color:var(--ink3);margin-bottom:5px;line-height:1.4;font-style:italic}
+.snote{background:var(--dep-bg);border-radius:8px;padding:1rem 1.25rem;margin-top:2rem;margin-bottom:1rem}
+.snote-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dep-text);margin-bottom:6px}
+.snote p{font-size:13px;color:var(--dep-text);line-height:1.6}
+.meth{margin-top:3rem;padding:1.5rem;background:var(--white);border:1px solid var(--border);border-radius:8px}
+.meth h3{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.75rem}
+.meth p{font-size:13px;color:var(--ink3);line-height:1.7;margin-bottom:.5rem}
+footer{text-align:center;padding:2rem;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);border-top:1px solid var(--border)}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:600px){
+  .colheads{grid-template-columns:1fr 80px 54px}
+  .colheads .chbar{display:none}
+  .row{grid-template-columns:1fr 80px 54px}
+  .row .bwrap{display:none}
+  .dgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hlabel">The Trust Frontier · Research Tool · Version 1.1</div>
+  <h1>The Quantum Advantage Matrix</h1>
+  <p>Where quantum computing and sensing deliver real advantage — and where the hype outpaces the evidence. Every score is sourced. Click any row to see the evidence.</p>
+  <div class="hmeta">Click any row · Filter by domain · Verified sources on every entry · May 2026 · Ari Gomez Zambrano</div>
+</header>
+<div class="container">
+  <div class="controls">
+    <span class="clabel">Domain</span>
+    <button class="filterbtn active" onclick="setFilter('all',this)">All</button>
+    <button class="filterbtn" onclick="setFilter('climate',this)">Climate</button>
+    <button class="filterbtn" onclick="setFilter('cryptography',this)">Cryptography</button>
+    <button class="filterbtn" onclick="setFilter('drug',this)">Drug discovery</button>
+    <button class="filterbtn" onclick="setFilter('finance',this)">Finance</button>
+    <button class="filterbtn" onclick="setFilter('logistics',this)">Logistics</button>
+    <button class="filterbtn" onclick="setFilter('sensing',this)">Quantum sensing</button>
+  </div>
+  <div class="legend">
+    <div class="li"><div class="ld" style="background:var(--near)"></div>Near-term · 2–5 yrs</div>
+    <div class="li"><div class="ld" style="background:var(--mid)"></div>Mid-term · 5–15 yrs</div>
+    <div class="li"><div class="ld" style="background:var(--far)"></div>Long-term · 15+ yrs</div>
+    <div class="li"><div class="ld" style="background:var(--dep)"></div>Partially deployed</div>
+  </div>
+  <div id="mwrap"></div>
+  <div class="meth">
+    <h3>Methodology &amp; transparency</h3>
+    <p>Readiness scores synthesise published hardware roadmaps, peer-reviewed algorithm benchmarks, and expert literature as of May 2026. They are not original primary research — every score links to its source. Quantum computing and quantum sensing are categorised separately: sensing uses quantum phenomena to measure physical quantities with precision; computing uses quantum algorithms to process information. Most media conflates the two.</p>
+    <p>The author is a Princeton ECE student and IBM Qiskit Advocate. Scores reflect honest assessment including uncertainty. Corrections and challenges from domain experts are welcomed at <a href="https://thetrustfrontier.substack.com" style="color:var(--dep)">thetrustfrontier.substack.com</a>.</p>
+  </div>
+</div>
+<footer><a href="https://thetrustfrontier.substack.com" target="_blank">thetrustfrontier.substack.com</a> &nbsp;·&nbsp; Ari Gomez Zambrano &nbsp;·&nbsp; Princeton ECE · IBM Qiskit Advocate · May 2026</footer>
+<script>
+var activeKey = null;
+var currentFilter = 'all';
+
+var COMPUTING = [
+  {id:0,domain:"climate",name:"Battery material simulation",tl:"near",score:82,color:"#0F6E56",approach:"Variational Quantum Eigensolver (VQE)",blocker:"Qubit coherence time at scale",impact:"Accelerates discovery of next-gen solid-state batteries for EVs",detail:"The most mature near-term climate application. VQE on 50-100 logical qubits could outperform classical DFT methods for lithium-air and sodium-ion battery materials. Ford/IonQ and IBM have demonstrated VQE for battery cathode simulation on real hardware.",sources:[{text:"Farag & Ghosh (2022) — VQE for cathode battery materials (arXiv:2208.07977)",url:"https://arxiv.org/abs/2208.07977"},{text:"Shokrian Zini et al. (2023) — Quantum simulation of battery materials (Quantum journal)",url:"https://quantum-journal.org/papers/q-2023-07-10-1049/"},{text:"IBM Research (2024) — Surface reaction calculations for lithium batteries",url:"https://research.ibm.com/publications/surface-reaction-calculations-with-quantum-computers-for-battery-materials"}]},
+  {id:1,domain:"climate",name:"Grid optimisation",tl:"near",score:74,color:"#0F6E56",approach:"QAOA (Quantum Approximate Optimisation Algorithm)",blocker:"Problem encoding overhead at national scale",impact:"Reduces grid imbalance and renewable curtailment",detail:"QAOA shows near-term promise for mid-size grids. The German Q-GRID project demonstrated exponential classical scaling at small problem sizes, suggesting quantum provides more favourable runtime. Full national grid optimisation remains mid-term.",sources:[{text:"Q-GRID Project (2024) — Quantum optimisation for the future energy grid (arXiv:2403.17495)",url:"https://arxiv.org/abs/2403.17495"},{text:"Ullah et al. (2022) — Quantum computing for smart grid applications (IET)",url:"https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/gtd2.12602"}]},
+  {id:2,domain:"climate",name:"Carbon capture catalyst design",tl:"near",score:68,color:"#0F6E56",approach:"Quantum chemistry + classical ML hybrid",blocker:"Classical simulation still competitive at small scales",impact:"Speeds discovery of MOF and zeolite catalysts for direct air capture",detail:"Quantum-classical hybrid methods show advantage simulating molecules with 20-30 active electrons. This is the softest near-term score — could reasonably be argued to 60. No single landmark paper — score carries higher uncertainty.",sources:[{text:"arXiv search: quantum MOF carbon capture literature",url:"https://arxiv.org/search/?searchtype=all&query=quantum+MOF+carbon+capture"},{text:"IBM Quantum — molecular simulation overview",url:"https://www.ibm.com/quantum/blog/quantum-chemistry"}]},
+  {id:3,domain:"climate",name:"Supply chain decarbonisation",tl:"mid",score:51,color:"#854F0B",approach:"Quantum annealing / QUBO formulation",blocker:"Problem size vs current qubit count",impact:"Optimises multi-modal transport under carbon constraints",detail:"D-Wave annealing shows partial real-world logistics results. Gate-based QAOA requires around 1,000 logical qubits for supply chains of meaningful commercial scale. Engineering gap, not physics gap.",sources:[{text:"D-Wave logistics case studies",url:"https://www.dwavesys.com/learn/case-studies/"},{text:"Volkswagen/D-Wave quantum routing pilot",url:"https://www.dwavesys.com/learn/featured-content/volkswagen-traffic/"}]},
+  {id:4,domain:"climate",name:"Nitrogen fixation catalyst (FeMoco)",tl:"mid",score:38,color:"#854F0B",approach:"Full quantum chemistry simulation of FeMoco enzyme",blocker:"Requires approximately 1 million logical qubits — hardware does not exist",impact:"Could replace Haber-Bosch process (1-2% of global energy consumption)",detail:"One of the most cited quantum climate applications and one of the most overhyped. Reiher et al. established FeMoco as a quantum target. Microsoft estimates 1 million logical qubits required. Appears in nearly every quantum climate pitch deck. Will not happen within any current policy horizon.",sources:[{text:"Reiher, Wiebe, Svore, Wecker & Troyer (2017) — PNAS 114:7555-7560",url:"https://www.pnas.org/doi/10.1073/pnas.1619152114"},{text:"arXiv preprint (open access)",url:"https://arxiv.org/abs/1605.03590"}]},
+  {id:5,domain:"climate",name:"Nuclear fusion plasma modelling",tl:"far",score:18,color:"#A32D2D",approach:"Quantum simulation of plasma dynamics",blocker:"Intractable at any near-term quantum scale",impact:"Could accelerate commercial fusion development",detail:"Classical ML including DeepMind's work with ITER is currently the more promising near-term path. Quantum advantage for plasma modelling has not been demonstrated at any meaningful scale.",sources:[{text:"DeepMind/ITER plasma control (Nature, 2022)",url:"https://www.nature.com/articles/s41586-021-04301-9"}]},
+  {id:6,domain:"climate",name:"Global climate system simulation",tl:"far",score:9,color:"#A32D2D",approach:"Quantum differential equation solvers",blocker:"No proven quantum speedup at planetary scale",impact:"Higher-resolution global climate projections",detail:"The highest-attention, lowest-readiness entry in the matrix. No proven quantum speedup for the differential equations involved at planetary scale. Classical HPC remains the practical tool for decades. This gap between hype and reality is itself the Trust Frontier story.",sources:[{text:"The Quantum Insider (2026) — climate modelling remains largely aspirational",url:"https://thequantuminsider.com/2026/05/04/quantum-computing-use-cases-real-applications-industries/"}]},
+  {id:7,domain:"cryptography",name:"Harvest now, decrypt later attacks",tl:"near",score:95,color:"#0F6E56",approach:"Store encrypted data today; decrypt when fault-tolerant hardware arrives",blocker:"No hardware barrier — the attack requires no quantum computer today",impact:"State secrets, health records, and financial data collected now at risk within 3-10 years",detail:"The highest score in the matrix and the most underreported threat. No quantum hardware is needed to harvest encrypted data today. This is why post-quantum migration is urgent regardless of when fault-tolerant hardware arrives. The attack is already underway.",sources:[{text:"Cloudflare (April 2026) — post-quantum roadmap and harvest-now threat",url:"https://blog.cloudflare.com/post-quantum-roadmap"},{text:"NIST Post-Quantum Cryptography standards approved August 2024",url:"https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards"}]},
+  {id:8,domain:"cryptography",name:"Breaking ECDLP-256 (Bitcoin/Ethereum wallets)",tl:"mid",score:91,color:"#854F0B",approach:"Shor's algorithm — optimised circuits from Google Quantum AI",blocker:"500,000 physical qubits needed; approximately 10,000 exist today",impact:"Would compromise approximately 6.9M BTC with exposed public keys",detail:"Google's March 2026 paper reduced the resource estimate 20-fold to under 500,000 physical qubits. Oratomic showed neutral-atom architecture could require as few as 10,000-26,000 qubits. On April 24 2026, independent researcher Giancarlo Lelli broke a 15-bit ECC key on publicly accessible cloud hardware — a 512x jump in 7 months.",sources:[{text:"Babbush et al. (2026) — arXiv:2603.28846 — Google Quantum AI paper",url:"https://arxiv.org/abs/2603.28846"},{text:"Oratomic/Caltech/Berkeley (2026) — arXiv:2603.28627 — neutral-atom approach",url:"https://arxiv.org/abs/2603.28627"},{text:"Project Eleven — Q-Day Prize awarded to Giancarlo Lelli, April 24 2026",url:"https://thequantuminsider.com/2026/04/24/project-eleven-q-day-prize-quantum-ecc-attack/"},{text:"Google Research Blog — responsible disclosure",url:"https://research.google/blog/safeguarding-cryptocurrency-by-disclosing-quantum-vulnerabilities-responsibly/"}]},
+  {id:9,domain:"cryptography",name:"Breaking RSA-2048",tl:"mid",score:72,color:"#854F0B",approach:"Shor's algorithm for integer factorisation",blocker:"Approximately 1 million physical qubits required",impact:"Would compromise most HTTPS, email encryption, and VPN infrastructure",detail:"Gidney's 2025 paper reduced the RSA-2048 estimate to under 1 million physical qubits. RSA is more widely deployed than ECC across internet infrastructure. Similar timeline to ECDLP-256 but requires more qubits.",sources:[{text:"Cloudflare — post-quantum roadmap analysis (April 2026)",url:"https://blog.cloudflare.com/post-quantum-roadmap"},{text:"Post-quantum.com — technical analysis of Google and Gidney estimates",url:"https://postquantum.com/security-pqc/google-quantum-bitcoin-ecdlp/"}]},
+  {id:10,domain:"cryptography",name:"Post-quantum cryptography migration",tl:"near",score:88,color:"#0F6E56",approach:"NIST-standardised lattice-based algorithms (CRYSTALS-Kyber, CRYSTALS-Dilithium)",blocker:"Deploying at scale across legacy infrastructure — engineering not research",impact:"Defends all current encryption against future quantum attacks",detail:"The defensive response is ready. NIST approved the first post-quantum cryptography standards in August 2024. Google set a 2029 migration deadline. Cloudflare accelerated its deadline to 2029 after calling Google's March 2026 research a real shock. The blocker is not research — it is the slow expensive work of updating legacy systems globally.",sources:[{text:"NIST — First post-quantum cryptography standards (August 2024)",url:"https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards"},{text:"Cloudflare blog — accelerating post-quantum deadline to 2029",url:"https://blog.cloudflare.com/post-quantum-roadmap"},{text:"Google Research — responsible disclosure and 2029 migration commitment",url:"https://research.google/blog/safeguarding-cryptocurrency-by-disclosing-quantum-vulnerabilities-responsibly/"}]},
+  {id:11,domain:"drug",name:"Small molecule drug simulation",tl:"near",score:71,color:"#0F6E56",approach:"VQE for molecular ground state energy calculation",blocker:"Limited to small active spaces on current NISQ hardware",impact:"Faster identification of drug candidates; reduced costly failed clinical trials",detail:"IonQ and Ansys demonstrated a 12% speedup over classical HPC in a blood pump fluid simulation in March 2025 — one of the first documented cases of practical quantum advantage in engineering. Microsoft and Quantinuum are developing hybrid quantum-classical approaches for molecular simulation.",sources:[{text:"IonQ & Ansys (March 2025) — quantum outperforms classical in medical device simulation",url:"https://www.ionq.com/news/ionq-and-ansys-achieve-major-quantum-computing-milestone-demonstrating"},{text:"HPCwire coverage of IonQ/Ansys 12% speedup milestone",url:"https://www.hpcwire.com/off-the-wire/ionq-and-ansys-explore-quantum-accelerated-medical-device-simulation/"}]},
+  {id:12,domain:"drug",name:"Protein folding and drug-protein binding",tl:"mid",score:48,color:"#854F0B",approach:"Quantum simulation of protein-ligand binding dynamics",blocker:"AlphaFold3 has dramatically raised the classical baseline",impact:"Modelling drug-protein interactions for complex diseases beyond classical reach",detail:"AlphaFold3 handles most protein structure prediction classically with extraordinary accuracy. Quantum simulation of binding dynamics may still offer advantage, but the evidence base is thinner than five years ago. The classical bar has been raised faster than anticipated.",sources:[{text:"AlphaFold3 paper (Nature, 2024) — context for raised classical baseline",url:"https://www.nature.com/articles/s41586-024-07487-w"}]},
+  {id:13,domain:"drug",name:"Personalised medicine optimisation",tl:"far",score:22,color:"#A32D2D",approach:"Quantum ML for treatment pathway optimisation",blocker:"No demonstrated quantum advantage over classical ML in clinical settings",impact:"Optimal treatment selection for individual patients",detail:"Largely aspirational. Classical ML including transformer models trained on clinical data is advancing rapidly. No peer-reviewed paper demonstrates a meaningful quantum speedup for clinical decision optimisation as of May 2026.",sources:[{text:"The Quantum Insider (2026) — AI and quantum ML remain largely aspirational",url:"https://thequantuminsider.com/2026/05/04/quantum-computing-use-cases-real-applications-industries/"}]},
+  {id:14,domain:"finance",name:"Derivatives pricing (Monte Carlo speedup)",tl:"mid",score:62,color:"#854F0B",approach:"Quantum amplitude estimation — quadratic speedup over classical Monte Carlo",blocker:"Fault-tolerant hardware required; speedup proven in theory not yet at useful scale",impact:"Faster more accurate pricing of complex financial instruments and risk measures",detail:"Quantum amplitude estimation provides a theoretically proven quadratic speedup for derivative pricing and Value at Risk. JPMorgan, Goldman Sachs, and BBVA have active quantum finance programmes. Demonstrating the speedup on real hardware at commercially useful scale is a mid-term target.",sources:[{text:"Woerner & Egger (2019) — Quantum risk analysis (npj Quantum Information)",url:"https://www.nature.com/articles/s41534-019-0130-6"},{text:"Stamatopoulos et al. (2023) — Quantum Monte Carlo for financial risk analytics (arXiv:2303.09682)",url:"https://arxiv.org/abs/2303.09682"}]},
+  {id:15,domain:"finance",name:"Portfolio optimisation",tl:"near",score:58,color:"#0F6E56",approach:"QAOA and quantum annealing for combinatorial optimisation",blocker:"Advantage demonstrated only at small portfolio sizes (dozens of assets)",impact:"Optimised asset allocation under complex constraints at scale",detail:"D-Wave and gate-based approaches have shown early results on portfolio optimisation at small scale. Real-world portfolios with thousands of assets remain beyond current hardware. The trajectory is clear.",sources:[{text:"D-Wave financial services case studies",url:"https://www.dwavesys.com/solutions-and-products/markets/financial-services/"},{text:"Mugel et al. (2022) — Dynamic portfolio optimisation with real quantum computers (Quantum journal)",url:"https://quantum-journal.org/papers/q-2022-01-18-619/"}]},
+  {id:16,domain:"finance",name:"Fraud detection",tl:"far",score:19,color:"#A32D2D",approach:"Quantum ML classification for anomaly detection",blocker:"No demonstrated quantum advantage over classical ML",impact:"Faster detection of fraudulent transaction patterns",detail:"Classical ML including graph neural networks already performs exceptionally at fraud detection. No peer-reviewed paper demonstrates meaningful quantum speedup for this application as of May 2026. Score reflects honest evidence assessment.",sources:[{text:"arXiv search — quantum computing fraud detection literature",url:"https://arxiv.org/search/?query=quantum+computing+fraud+detection&searchtype=all"}]},
+  {id:17,domain:"logistics",name:"Warehouse and inventory optimisation",tl:"near",score:61,color:"#0F6E56",approach:"Quantum annealing for scheduling and bin-packing problems",blocker:"Advantage limited to specific problem structures",impact:"Reduced inventory costs and improved fulfilment speed",detail:"One of the most commercially active near-term quantum areas. D-Wave and Fujitsu have deployed early hybrid quantum-classical systems for warehouse optimisation at Volkswagen and other manufacturers. The advantage is narrow but real at current qubit counts.",sources:[{text:"D-Wave commercial deployments overview",url:"https://www.dwavesys.com/learn/case-studies/"},{text:"Fujitsu quantum annealing for manufacturing optimisation",url:"https://www.fujitsu.com/global/services/business-technology/it-services/quantum-computing/"}]},
+  {id:18,domain:"logistics",name:"Vehicle routing optimisation",tl:"mid",score:54,color:"#854F0B",approach:"QAOA and quantum annealing (QUBO formulation)",blocker:"Real-world fleet sizes exceed current qubit counts",impact:"Optimised delivery routes reducing fuel consumption and emissions",detail:"D-Wave has published real logistics case studies with partial advantage. Volkswagen demonstrated quantum-optimised bus routing in Lisbon. Gate-based QAOA requires more qubits for fleet sizes of meaningful commercial scale.",sources:[{text:"Volkswagen and D-Wave quantum traffic flow optimisation pilot",url:"https://www.dwavesys.com/learn/featured-content/volkswagen-traffic/"},{text:"D-Wave vehicle routing case studies",url:"https://www.dwavesys.com/learn/case-studies/"}]},
+  {id:19,domain:"logistics",name:"Air traffic management",tl:"far",score:27,color:"#A32D2D",approach:"Quantum optimisation for real-time conflict resolution",blocker:"Real-time constraint requires hardware that does not exist",impact:"Safer more efficient airspace management at scale",detail:"NASA and Airbus have explored quantum approaches to air traffic conflict detection. The real-time requirement — decisions in seconds across thousands of simultaneous aircraft — makes this a long-term target. Current quantum hardware is far too slow.",sources:[{text:"NASA quantum computing for aviation research",url:"https://www.nasa.gov/quantum"},{text:"Airbus quantum computing programme overview",url:"https://www.airbus.com/en/innovation/disruptive-concepts/quantum-technologies"}]}
+];
+
+var SENSING = [
+  {id:20,domain:"sensing",name:"Atomic clocks — timing and synchronisation",tl:"dep",score:92,color:"#185FA5",approach:"Optical lattice clocks using strontium or ytterbium atoms",blocker:"Miniaturisation and cost for widespread field deployment",impact:"GPS timing precision 20-200x better than current standards; financial synchronisation; 6G networks",detail:"The most mature quantum technology in existence — already deployed in national standards laboratories worldwide. Portable optical quantum clocks demonstrated in 2025 naval exercises achieved timing precision 20-200 times greater than GPS standards, maintaining stability under shipboard conditions. This is not near-term potential — it is current reality.",sources:[{text:"University of Adelaide / DSTG — portable quantum clocks in naval exercises (Nature Communications, 2025)",url:"https://phys.org/news/2025-07-quantum-clocks-accuracy-current-gps.html"},{text:"PatSnap quantum sensing landscape 2026 — atomic clocks market analysis",url:"https://www.patsnap.com/resources/blog/articles/quantum-sensing-technology-landscape-2026/"}]},
+  {id:21,domain:"sensing",name:"Inertial navigation — GPS-denied environments",tl:"near",score:78,color:"#0F6E56",approach:"Cold atom interferometry for drift-free acceleration and rotation measurement",blocker:"Miniaturisation — current systems too large for most deployment platforms",impact:"Submarines, aircraft, missiles, and autonomous vehicles navigating without GPS signals",detail:"DARPA's TQS programme is funding field validation by Lockheed Martin, AOSense, and Q-CTRL. Vector Atomic demonstrated micro-g level precision compatible with satellite gravity maps during sea trials — sub-metre position accuracy over 1-hour missions. The technology works at prototype scale.",sources:[{text:"Springer GPS Solutions (2026) — quantum sensing for positioning and navigation (comprehensive review)",url:"https://link.springer.com/article/10.1007/s10291-026-02030-y"},{text:"Pentagon / SandboxAQ — AQNav quantum navigation software for GPS-denied operations",url:"https://www.webpronews.com/quantum-compass-how-atomic-sensors-are-redefining-military-navigation-beyond-gps/"},{text:"Q-CTRL — DARPA-funded quantum sensing for defence platforms",url:"https://www.q-ctrl.com/solutions/defense"}]},
+  {id:22,domain:"sensing",name:"Quantum magnetometry",tl:"near",score:65,color:"#0F6E56",approach:"SQUID devices and nitrogen-vacancy (NV) centre magnetic sensing",blocker:"Cryogenic requirements for highest sensitivity; miniaturisation for room-temperature systems",impact:"Submarine detection, underground infrastructure mapping, non-invasive brain imaging",detail:"SQUIDs are already deployed in medical MEG brain imaging. NV-centre magnetometers operate at room temperature — a major practical advantage. Defence applications for submarine detection and underground mapping are active DARPA-funded areas. FDA clearance for clinical OPM brain imaging systems is a key near-term milestone.",sources:[{text:"PatSnap quantum sensing landscape 2026 — magnetometry market and milestones",url:"https://www.patsnap.com/resources/blog/articles/quantum-sensing-technology-landscape-2026/"},{text:"QuSpin — OPM magnetometry for brain imaging (commercial)",url:"https://quspin.com/"}]},
+  {id:23,domain:"sensing",name:"Quantum gravimetry",tl:"mid",score:57,color:"#854F0B",approach:"Atom interferometry gravimeters measuring minute gravitational field variations",blocker:"Sensitivity vs portability tradeoff not yet resolved at field scale",impact:"Underground resource mapping (oil, water, minerals); infrastructure inspection; volcano monitoring",detail:"Quantum gravimeters detect density variations underground with extraordinary precision. Commercial systems exist (Muquans, AOSense) but remain bulky. Genuine advantage over classical gravimeters is established; scale and cost are the remaining challenges.",sources:[{text:"Science China Physics (2025) — review of quantum sensing in navigation including gravimetry",url:"https://www.researchgate.net/publication/398986285_Navigation_in_the_future_Review_of_quantum_sensing_in_navigation"},{text:"Muquans — commercial quantum gravimetry systems",url:"https://www.muquans.com/"}]}
+];
+
+function tlLabel(t){return t==='near'?'2-5 yrs':t==='mid'?'5-15 yrs':t==='far'?'15+ yrs':'Deployed'}
+function tlBadge(t){return t==='near'?'badge-near':t==='mid'?'badge-mid':t==='far'?'badge-far':'badge-dep'}
+
+function renderRows(rows, isSensing){
+  var html = '';
+  for(var i=0;i<rows.length;i++){
+    var d = rows[i];
+    var isActive = activeKey === d.id;
+    var sc = isSensing ? ' sensing' : '';
+    html += '<div class="row' + (isActive?' active':'') + sc + '" onclick="toggleRow(' + d.id + ')">';
+    html += '<div><div class="rname">' + d.name + '</div><div class="rdomain">' + d.domain + '</div></div>';
+    html += '<div class="bwrap"><div class="btrack"><div class="bfill" style="width:' + d.score + '%;background:' + d.color + '"></div></div></div>';
+    html += '<div><span class="tbadge ' + tlBadge(d.tl) + '">' + tlLabel(d.tl) + '</span></div>';
+    html += '<div class="scoreval">' + d.score + '</div>';
+    html += '</div>';
+    if(isActive){
+      var srcHtml = '';
+      for(var s=0;s<d.sources.length;s++){
+        var src = d.sources[s];
+        if(src.url){
+          srcHtml += '<a class="srclink" href="' + src.url + '" target="_blank" rel="noopener">' + src.text + '</a>';
+        } else {
+          srcHtml += '<div class="srcnote">' + src.text + '</div>';
+        }
+      }
+      html += '<div class="detail">';
+      html += '<div class="dtitle">' + d.name + '</div>';
+      html += '<div class="dbyline">' + d.domain.toUpperCase() + ' · ' + tlLabel(d.tl) + ' · Readiness score: ' + d.score + '/100</div>';
+      html += '<div class="dgrid">';
+      html += '<div class="dc"><div class="dclabel">Quantum approach</div><div class="dcval">' + d.approach + '</div></div>';
+      html += '<div class="dc"><div class="dclabel">Main blocker</div><div class="dcval">' + d.blocker + '</div></div>';
+      html += '<div class="dc full"><div class="dclabel">Impact if realised</div><div class="dcval">' + d.impact + '</div></div>';
+      html += '</div>';
+      html += '<div class="ddesc">' + d.detail + '</div>';
+      html += '<div class="srcblock"><div class="srclabel">Sources &amp; evidence</div>' + srcHtml + '</div>';
+      html += '</div>';
+    }
+  }
+  return html;
+}
+
+function setFilter(f, btn){
+  currentFilter = f;
+  activeKey = null;
+  var btns = document.querySelectorAll('.filterbtn');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  render();
+}
+
+function toggleRow(id){
+  activeKey = activeKey === id ? null : id;
+  render();
+}
+
+function render(){
+  var w = document.getElementById('mwrap');
+  var showSensing = currentFilter === 'sensing' || currentFilter === 'all';
+  var showComputing = currentFilter !== 'sensing';
+  var compFiltered = COMPUTING.filter(function(d){ return currentFilter==='all' || d.domain===currentFilter; });
+  var sensFiltered = SENSING.filter(function(d){ return currentFilter==='all' || currentFilter==='sensing'; });
+  var html = '';
+  if(showComputing && compFiltered.length > 0){
+    if(currentFilter==='all') html += '<div class="sdiv">Quantum computing</div>';
+    html += '<div class="colheads"><span>Problem</span><span class="chbar">Readiness</span><span>Timeline</span><span>Score</span></div>';
+    html += '<div class="mlist">' + renderRows(compFiltered, false) + '</div>';
+  }
+  if(showSensing && sensFiltered.length > 0){
+    html += '<div class="sdiv">Quantum sensing — separate category</div>';
+    html += '<div class="snote"><div class="snote-label">Why sensing is categorised separately</div><p>Quantum sensing uses quantum mechanical phenomena to measure physical quantities with extraordinary precision. It does not use quantum computers to run algorithms. Scores use different criteria — hardware readiness replaces logical qubit requirements. Most media coverage conflates the two categories. Separating them is the honest approach.</p></div>';
+    html += '<div class="colheads"><span>Application</span><span class="chbar">Readiness</span><span>Timeline</span><span>Score</span></div>';
+    html += '<div class="mlist">' + renderRows(sensFiltered, true) + '</div>';
+  }
+  if(!html) html = '<p style="color:#888;padding:2rem 0;font-size:14px">No entries for this filter.</p>';
+  w.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>

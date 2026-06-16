@@ -1,0 +1,18 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="500" fill="#0D1B3E"/>
+  <circle cx="250" cy="250" r="220" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.08"/>
+  <circle cx="250" cy="250" r="170" fill="none" stroke="#C9A84C" stroke-width="0.6" opacity="0.06"/>
+  <!-- T crossbar -->
+  <line x1="110" y1="220" x2="390" y2="220" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+  <!-- T stem -->
+  <line x1="250" y1="220" x2="250" y2="370" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+  <!-- Órbita cuántica -->
+  <ellipse cx="250" cy="220" rx="76" ry="25" fill="none" stroke="#C9A84C" stroke-width="2.8"/>
+  <ellipse cx="250" cy="220" rx="76" ry="25" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.3" transform="rotate(18 250 220)"/>
+  <!-- Electrón -->
+  <circle cx="326" cy="220" r="12" fill="#C9A84C"/>
+  <circle cx="326" cy="220" r="20" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity="0.35"/>
+  <!-- Núcleo -->
+  <circle cx="250" cy="220" r="9" fill="#1D9E75"/>
+  <circle cx="250" cy="220" r="16" fill="none" stroke="#1D9E75" stroke-width="1.2" opacity="0.4"/>
+</svg>

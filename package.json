@@ -1,0 +1,26 @@
+{
+  "name": "the-trust-frontier",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "deploy": "npx @cloudflare/next-on-pages && wrangler pages deploy"
+  },
+  "dependencies": {
+    "next": "^16.2.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.12",
+    "@cloudflare/workers-types": "^4.20241230.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^8",
+    "eslint-config-next": "15.1.0",
+    "typescript": "^5",
+    "wrangler": "^3.114.0"
+  }
+}

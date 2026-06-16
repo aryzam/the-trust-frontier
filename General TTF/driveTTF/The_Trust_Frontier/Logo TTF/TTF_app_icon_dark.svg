@@ -1,0 +1,14 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="114" fill="#0D1B3E"/>
+  <!-- T -->
+  <line x1="118" y1="226" x2="394" y2="226" stroke="#FFFFFF" stroke-width="24" stroke-linecap="round"/>
+  <line x1="256" y1="226" x2="256" y2="370" stroke="#FFFFFF" stroke-width="24" stroke-linecap="round"/>
+  <!-- Órbita -->
+  <ellipse cx="256" cy="226" rx="80" ry="26" fill="none" stroke="#C9A84C" stroke-width="3"/>
+  <!-- Electrón -->
+  <circle cx="336" cy="226" r="13" fill="#C9A84C"/>
+  <circle cx="336" cy="226" r="22" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.35"/>
+  <!-- Núcleo -->
+  <circle cx="256" cy="226" r="10" fill="#1D9E75"/>
+  <circle cx="256" cy="226" r="18" fill="none" stroke="#1D9E75" stroke-width="1.2" opacity="0.4"/>
+</svg>
